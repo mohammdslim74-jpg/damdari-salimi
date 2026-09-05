@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دامداری سلیمی | مدیریت هوشمند دامداری</title>
+<style>
+:root{--g:#07553a;--g2:#0b7a54;--bg:#f4f7f5;--card:#fff;--line:#e1e9e4;--txt:#17241e;--muted:#718078;--red:#d94b4b;--orange:#ed9b1f;--blue:#3277b8;--shadow:0 8px 25px rgba(15,62,40,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:Tahoma,Arial,sans-serif;font-size:14px}
+.app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.side{background:linear-gradient(180deg,#063a29,#082c22);color:#fff;padding:20px 14px;display:flex;flex-direction:column}
+.brand{text-align:center;padding:12px 8px 24px;border-bottom:1px solid #ffffff18}.logo{font-size:44px}.brand h1{margin:5px 0;font-size:23px}.brand p{margin:0;color:#c4d8d0;font-size:12px}
+nav{display:grid;gap:5px;padding-top:18px}nav button{border:0;background:transparent;color:#e6f0eb;padding:13px;border-radius:11px;text-align:right;font-family:inherit;font-size:14px;cursor:pointer}nav button:hover,nav button.active{background:#176448}nav i{font-style:normal;font-size:19px;margin-left:9px}
+.side-footer{margin-top:auto;border-top:1px solid #ffffff18;padding-top:15px}.side-footer button{width:100%;padding:12px;background:#ffffff12;color:#fff;border:0;border-radius:10px;font-family:inherit;cursor:pointer}
+main{padding:0 24px 35px;max-width:1800px;width:100%;margin:auto}.top{height:75px;display:flex;align-items:center;justify-content:space-between}.user{display:flex;gap:10px;align-items:center}.avatar{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:#dce9e3}.muted{color:var(--muted);font-size:12px}
+.page{display:none}.page.active{display:block}.hero{background:linear-gradient(90deg,#ffffffed,#ffffff70),url('https://images.unsplash.com/photo-1484557985045-edf25e08da73?auto=format&fit=crop&w=1600&q=80') center/cover;min-height:165px;border-radius:20px;padding:28px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}h2{margin:0 0 9px;font-size:27px}.btn{border:0;border-radius:10px;padding:11px 15px;font-family:inherit;cursor:pointer}.primary{background:var(--g);color:#fff}.secondary{background:#e7f2ed;color:var(--g)}.danger{background:#fee9e9;color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:18px 0}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow)}.stat b{font-size:28px;display:block;margin:10px 0}.stat small{color:var(--muted)}
+.two{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.card h3{margin:0 0 16px}.bars{height:210px;display:flex;align-items:end;gap:9px;border-bottom:1px solid var(--line);padding:10px}.barwrap{flex:1;text-align:center;font-size:10px;color:var(--muted)}.bar{background:linear-gradient(var(--g2),var(--g));border-radius:8px 8px 0 0;margin-bottom:6px}
+.status-row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-left:7px}.green{background:#19865b}.orange{background:var(--orange)}.red{background:var(--red)}.blue{background:var(--blue)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.search,input,select,textarea{border:1px solid var(--line);border-radius:9px;padding:11px;font-family:inherit;background:#fff}.search{min-width:240px;flex:1}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:12px 9px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}th{color:var(--muted)}.tablewrap{overflow:auto}.tag{padding:5px 9px;border-radius:20px;background:#e7f5ec;color:var(--g);font-size:11px}
+.form-card{max-width:1100px}.form{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.form label{display:grid;gap:6px;color:#536159;font-size:12px}.full{grid-column:1/-1}.section-title{display:flex;justify-content:space-between;align-items:center;margin:5px 0 16px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.empty{text-align:center;padding:30px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:16px;z-index:5}.modal.show{display:grid}.modal-box{width:min(1000px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:18px;padding:22px}.actions{display:flex;gap:6px}.mini{padding:7px 9px;font-size:12px}
+.notice{position:fixed;left:20px;bottom:20px;background:#183e2f;color:#fff;padding:13px 17px;border-radius:11px;display:none;z-index:9}.notice.show{display:block}
+@media(max-width:1050px){.app{grid-template-columns:210px 1fr}.grid{grid-template-columns:repeat(3,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.app{display:block}.side{padding:12px}.brand{padding:4px 0 10px}.brand p,.logo{display:none}nav{grid-template-columns:repeat(2,1fr);padding-top:10px}.side-footer{display:none}main{padding:0 12px 25px}.hero{min-height:190px;align-items:flex-start;gap:15px;flex-direction:column}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.form{grid-template-columns:1fr}.full{grid-column:auto}.top{height:65px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side">
+ <div class="brand"><div class="logo">🐑</div><h1>دامداری سلیمی</h1><p>سامانه مدیریت هوشمند دامداری</p></div>
+ <nav>
+  <button class="active" data-page="dashboard"><i>▦</i>داشبورد</button>
+  <button data-page="animals"><i>🐑</i>مدیریت دام‌ها</button>
+  <button data-page="milk"><i>🥛</i>ثبت شیر</button>
+  <button data-page="health"><i>💉</i>سلامت و واکسیناسیون</button>
+  <button data-page="breeding"><i>♡</i>تولیدمثل و زایش</button>
+  <button data-page="finance"><i>₼</i>هزینه‌ها و درآمدها</button>
+  <button data-page="reports"><i>▥</i>گزارش‌ها</button>
+  <button data-page="settings"><i>⚙</i>تنظیمات و پشتیبان‌گیری</button>
+ </nav>
+ <div class="side-footer"><button onclick="alert('برای خروج، جلسه کاربر در نسخه آنلاین بسته می‌شود.')">← خروج از سیستم</button></div>
+</aside>
+
+<main>
+<div class="top"><div class="user"><div class="avatar">👤</div><div><b id="ownerName">حسن سلیمی</b><div class="muted">مدیر سیستم</div></div></div><div class="muted" id="today"></div></div>
+
+<section class="page active" id="dashboard">
+ <div class="hero"><div><h2>سلام <span id="welcomeName">حسن سلیمی</span> 👋</h2><div>به سامانه مدیریت دامداری سلیمی خوش آمدید</div><div class="muted" style="margin-top:10px">تمام اطلاعات در این نسخه روی همین دستگاه ذخیره می‌شود.</div></div><button class="btn primary" onclick="openAnimal()">＋ افزودن دام جدید</button></div>
+ <div class="grid" id="stats"></div>
+ <div class="two">
+  <div class="card"><h3>تولید شیر ۷ روز اخیر (لیتر)</h3><div class="bars" id="milkChart"></div></div>
+  <div class="card"><h3>وضعیت دام‌ها</h3><div id="statusBox"></div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><div class="section-title"><h3>آخرین دام‌های ثبت‌شده</h3><button class="btn secondary mini" onclick="go('animals')">مشاهده همه</button></div><div class="tablewrap"><table><thead><tr><th>کد</th><th>پلاک</th><th>نژاد</th><th>جنسیت</th><th>تاریخ تولد</th><th>سن</th><th>وزن</th><th>وضعیت</th></tr></thead><tbody id="recentAnimals"></tbody></table></div></div>
+</section>
+
+<section class="page" id="animals">
+ <div class="section-title"><h2>مدیریت دام‌ها</h2><button class="btn primary" onclick="openAnimal()">＋ ثبت دام</button></div>
+ <div class="card"><div class="toolbar"><input class="search" id="animalSearch" placeholder="جستجو بر اساس کد، پلاک، نژاد..." oninput="renderAnimals()"><select id="animalFilter" onchange="renderAnimals()"><option value="">همه وضعیت‌ها</option><option>شیرده</option><option>آبستن</option><option>غیر شیرده</option><option>بره</option><option>فروخته شده</option><option>تلف شده</option></select></div><div class="tablewrap"><table><thead><tr><th>کد</th><th>پلاک</th><th>نام</th><th>نژاد</th><th>جنسیت</th><th>تولد</th><th>سن</th><th>وزن</th><th>وضعیت</th><th>آخرین شیر</th><th>عملیات</th></tr></thead><tbody id="animalRows"></tbody></table></div></div>
+</section>
+
+<section class="page" id="milk">
+ <div class="section-title"><h2>ثبت و مدیریت شیر</h2><button class="btn primary" onclick="openMilk()">＋ ثبت دوشیدن شیر</button></div>
+ <div class="kpis" id="milkKpis"></div>
+ <div class="card"><div class="tablewrap"><table><thead><tr><th>دام</th><th>تاریخ</th><th>ساعت</th><th>نوبت</th><th>مقدار (لیتر)</th><th>یادداشت</th><th>حذف</th></tr></thead><tbody id="milkRows"></tbody></table></div></div>
+</section>
+
+<section class="page" id="health">
+ <div class="section-title"><h2>سلامت، واکسیناسیون و درمان</h2><button class="btn primary" onclick="openHealth()">＋ ثبت پرونده سلامت</button></div>
+ <div class="card"><div class="tablewrap"><table><thead><tr><th>دام</th><th>نوع</th><th>عنوان</th><th>تاریخ</th><th>تاریخ بعدی</th><th>دامپزشک/یادداشت</th><th>حذف</th></tr></thead><tbody id="healthRows"></tbody></table></div></div>
+</section>
+
+<section class="page" id="breeding">
+ <div class="section-title"><h2>تولیدمثل و زایش</h2><button class="btn primary" onclick="openBreeding()">＋ ثبت رویداد</button></div>
+ <div class="card"><div class="tablewrap"><table><thead><tr><th>دام</th><th>نوع رویداد</th><th>تاریخ جفت‌گیری</th><th>تاریخ احتمالی زایش</th><th>تاریخ زایش</th><th>تعداد بره</th><th>توضیحات</th><th>حذف</th></tr></thead><tbody id="breedRows"></tbody></table></div></div>
+</section>
+
+<section class="page" id="finance">
+ <div class="section-title"><h2>هزینه‌ها و درآمدها</h2><button class="btn primary" onclick="openFinance()">＋ ثبت تراکنش</button></div>
+ <div class="kpis" id="financeKpis"></div>
+ <div class="card"><div class="tablewrap"><table><thead><tr><th>نوع</th><th>دسته‌بندی</th><th>مبلغ</th><th>تاریخ</th><th>شرح</th><th>حذف</th></tr></thead><tbody id="financeRows"></tbody></table></div></div>
+</section>
+
+<section class="page" id="reports">
+ <div class="section-title"><h2>گزارش‌ها</h2><button class="btn primary" onclick="printReport()">🖨 چاپ گزارش</button></div>
+ <div class="card" id="reportBox"></div>
+</section>
+
+<section class="page" id="settings">
+ <h2>تنظیمات و پشتیبان‌گیری</h2>
+ <div class="card form-card" style="margin-top:16px">
+  <div class="form">
+   <label>نام مدیر<input id="setName"></label><label>نام دامداری<input id="setFarm"></label><label>واحد پول<input id="setCurrency" value="تومان"></label>
+  </div><div style="margin-top:15px"><button class="btn primary" onclick="saveSettings()">ذخیره تنظیمات</button></div>
+ </div>
+ <div class="card form-card" style="margin-top:16px"><h3>پشتیبان‌گیری اطلاعات</h3><p class="muted">فایل پشتیبان شامل دام‌ها، شیر، سلامت، زایش و حسابداری است.</p><button class="btn secondary" onclick="exportData()">⬇ دانلود پشتیبان</button> <label class="btn secondary" style="display:inline-block">⬆ بازیابی فایل<input type="file" hidden accept=".json" onchange="importData(event)"></label></div>
+</section>
+</main></div>
+
+<div class="modal" id="modal"><div class="modal-box"><div id="modalContent"></div></div></div>
+<div class="notice" id="notice"></div>
+
+<script>
+const KEY='salimiFarmV2';
+const seed={
+ settings:{owner:'حسن سلیمی',farm:'دامداری سلیمی',currency:'تومان'},
+ animals:[
+  {id:'D-245',tag:'۱۲۸۷',name:'',breed:'افشاری',gender:'ماده',birth:'2022-09-06',weight:42,status:'شیرده'},
+  {id:'D-244',tag:'۱۲۸۶',name:'',breed:'مهربان',gender:'ماده',birth:'2022-08-19',weight:45,status:'آبستن'},
+  {id:'D-243',tag:'۱۲۸۵',name:'',breed:'افشاری',gender:'نر',birth:'2021-08-01',weight:50,status:'غیر شیرده'}
+ ],
+ milk:[
+  {animal:'D-245',date:'2026-09-05',time:'06:30',shift:'صبح',amount:3.8,note:''},
+  {animal:'D-245',date:'2026-09-04',time:'18:20',shift:'عصر',amount:3.4,note:''}
+ ],
+ health:[{animal:'D-244',type:'واکسن',title:'واکسن دوره‌ای',date:'2026-08-28',next:'2026-11-28',note:'نیاز به پیگیری'}],
+ breeding:[{animal:'D-244',type:'آبستنی',mate:'2026-06-10',due:'2026-11-07',birth:'',lambs:'',note:''}],
+ finance:[]
+};
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||seed;
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function fa(n){return Number(n||0).toLocaleString('fa-IR')}
+function age(b){if(!b)return '—';let d=new Date(b),now=new Date(),m=(now-d)/(365.25*864e5);return m<1?Math.max(0,Math.floor(m*12))+' ماه':Math.floor(m)+' سال'}
+function lastMilk(id){let x=db.milk.filter(v=>v.animal===id).sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time))[0];return x?`${x.date} ${x.time}`:'—'}
+function notify(t){let n=document.getElementById('notice');n.textContent=t;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),2200)}
+function go(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+document.querySelectorAll('nav button[data-page]').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function animalOptions(){return db.animals.map(a=>`<option value="${a.id}">${a.id} - ${a.breed}</option>`).join('')}
+function openModal(content){document.getElementById('modalContent').innerHTML=content;document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function openAnimal(a=null){
+ openModal(`<div class="section-title"><h2>${a?'ویرایش دام':'ثبت دام جدید'}</h2><button class="btn secondary" onclick="closeModal()">×</button></div>
+ <div class="form"><label>کد دام<input id="f_id" value="${a?.id||'D-'+Math.floor(Math.random()*900+100)}"></label><label>شماره پلاک<input id="f_tag" value="${a?.tag||''}"></label><label>نام دام<input id="f_name" value="${a?.name||''}"></label><label>نژاد<input id="f_breed" value="${a?.breed||''}"></label><label>جنسیت<select id="f_gender"><option ${a?.gender==='ماده'?'selected':''}>ماده</option><option ${a?.gender==='نر'?'selected':''}>نر</option></select></label><label>تاریخ تولد<input type="date" id="f_birth" value="${a?.birth||''}"></label><label>وزن (کیلوگرم)<input type="number" id="f_weight" value="${a?.weight||''}"></label><label>وضعیت<select id="f_status">${['شیرده','آبستن','غیر شیرده','بره','فروخته شده','تلف شده'].map(x=>`<option ${a?.status===x?'selected':''}>${x}</option>`).join('')}</select></label></div>
+ <div style="margin-top:18px"><button class="btn primary" onclick="saveAnimal('${a?.id||''}')">ذخیره</button></div>`)
+}
+function saveAnimal(old){
+ let a={id:f_id.value.trim(),tag:f_tag.value.trim(),name:f_name.value.trim(),breed:f_breed.value.trim(),gender:f_gender.value,birth:f_birth.value,weight:Number(f_weight.value||0),status:f_status.value};
+ if(!a.id){notify('کد دام الزامی است');return}
+ if(old){let i=db.animals.findIndex(x=>x.id===old);db.animals[i]=a;db.milk.forEach(x=>{if(x.animal===old)x.animal=a.id})}else{if(db.animals.some(x=>x.id===a.id)){notify('این کد قبلاً ثبت شده');return}db.animals.unshift(a)}
+ closeModal();save();notify('اطلاعات دام ذخیره شد')
+}
+function delAnimal(id){if(confirm('این دام حذف شود؟')){db.animals=db.animals.filter(x=>x.id!==id);save()}}
+function openMilk(){openModal(`<div class="section-title"><h2>ثبت دوشیدن شیر</h2><button class="btn secondary" onclick="closeModal()">×</button></div><div class="form"><label>دام<select id="m_animal">${animalOptions()}</select></label><label>تاریخ<input id="m_date" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label>ساعت<input id="m_time" type="time"></label><label>نوبت<select id="m_shift"><option>صبح</option><option>عصر</option><option>شب</option></select></label><label>مقدار شیر (لیتر)<input id="m_amount" type="number" step=".1"></label><label class="full">یادداشت<textarea id="m_note"></textarea></label></div><div style="margin-top:18px"><button class="btn primary" onclick="saveMilk()">ثبت</button></div>`)}
+function saveMilk(){if(!m_amount.value){notify('مقدار شیر را وارد کنید');return}db.milk.unshift({animal:m_animal.value,date:m_date.value,time:m_time.value,shift:m_shift.value,amount:Number(m_amount.value),note:m_note.value});closeModal();save();notify('ثبت شیر انجام شد')}
+function openHealth(){openModal(`<div class="section-title"><h2>ثبت پرونده سلامت</h2><button class="btn secondary" onclick="closeModal()">×</button></div><div class="form"><label>دام<select id="h_animal">${animalOptions()}</select></label><label>نوع<select id="h_type"><option>واکسن</option><option>بیماری</option><option>دارو</option><option>ویزیت دامپزشک</option></select></label><label>عنوان<input id="h_title"></label><label>تاریخ<input id="h_date" type="date"></label><label>تاریخ بعدی<input id="h_next" type="date"></label><label class="full">توضیحات / دامپزشک<textarea id="h_note"></textarea></label></div><div style="margin-top:18px"><button class="btn primary" onclick="saveHealth()">ثبت</button></div>`)}
+function saveHealth(){db.health.unshift({animal:h_animal.value,type:h_type.value,title:h_title.value,date:h_date.value,next:h_next.value,note:h_note.value});closeModal();save();notify('پرونده سلامت ذخیره شد')}
+function openBreeding(){openModal(`<div class="section-title"><h2>ثبت رویداد تولیدمثل</h2><button class="btn secondary" onclick="closeModal()">×</button></div><div class="form"><label>دام<select id="b_animal">${animalOptions()}</select></label><label>نوع<select id="b_type"><option>جفت‌گیری</option><option>آبستنی</option><option>زایش</option></select></label><label>تاریخ جفت‌گیری<input id="b_mate" type="date"></label><label>تاریخ احتمالی زایش<input id="b_due" type="date"></label><label>تاریخ زایش<input id="b_birth" type="date"></label><label>تعداد بره<input id="b_lambs" type="number"></label><label class="full">توضیحات<textarea id="b_note"></textarea></label></div><div style="margin-top:18px"><button class="btn primary" onclick="saveBreed()">ثبت</button></div>`)}
+function saveBreed(){db.breeding.unshift({animal:b_animal.value,type:b_type.value,mate:b_mate.value,due:b_due.value,birth:b_birth.value,lambs:b_lambs.value,note:b_note.value});closeModal();save();notify('رویداد ثبت شد')}
+function openFinance(){openModal(`<div class="section-title"><h2>ثبت تراکنش مالی</h2><button class="btn secondary" onclick="closeModal()">×</button></div><div class="form"><label>نوع<select id="x_type"><option>درآمد</option><option>هزینه</option></select></label><label>دسته‌بندی<input id="x_cat" placeholder="خوراک، فروش شیر، دارو..."></label><label>مبلغ<input id="x_amount" type="number"></label><label>تاریخ<input id="x_date" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label class="full">شرح<textarea id="x_note"></textarea></label></div><div style="margin-top:18px"><button class="btn primary" onclick="saveFinance()">ثبت</button></div>`)}
+function saveFinance(){db.finance.unshift({type:x_type.value,cat:x_cat.value,amount:Number(x_amount.value||0),date:x_date.value,note:x_note.value});closeModal();save();notify('تراکنش ثبت شد')}
+function del(arr,i){db[arr].splice(i,1);save()}
+function renderDashboard(){
+ let active=db.animals.filter(a=>!['فروخته شده','تلف شده'].includes(a.status)).length;
+ let today=new Date().toISOString().slice(0,10),todayMilk=db.milk.filter(x=>x.date===today).reduce((s,x)=>s+x.amount,0);
+ let pregnant=db.animals.filter(a=>a.status==='آبستن').length;
+ let upcoming=db.health.filter(x=>x.next&&new Date(x.next)-new Date()<14*864e5&&new Date(x.next)>=new Date()).length;
+ let births=db.breeding.filter(x=>x.due&&new Date(x.due)-new Date()<21*864e5&&new Date(x.due)>=new Date()).length;
+ document.getElementById('stats').innerHTML=[
+ ['تعداد کل دام‌ها',active,'رأس'],['میزان شیر امروز',fa(todayMilk),'لیتر'],['دام‌های آبستن',pregnant,'رأس'],['واکسن‌های نزدیک',upcoming,'مورد'],['زایش‌های نزدیک',births,'مورد']
+ ].map(x=>`<div class="card stat"><span>${x[0]}</span><b>${x[1]}</b><small>${x[2]}</small></div>`).join('');
+ let days=[6,5,4,3,2,1,0].map(i=>{let d=new Date();d.setDate(d.getDate()-i);return d.toISOString().slice(0,10)});
+ let vals=days.map(d=>db.milk.filter(x=>x.date===d).reduce((s,x)=>s+x.amount,0)),max=Math.max(...vals,1);
+ milkChart.innerHTML=vals.map((v,i)=>`<div class="barwrap"><div class="bar" style="height:${Math.max(8,v/max*180)}px"></div>${days[i].slice(5)}</div>`).join('');
+ let groups=['شیرده','آبستن','غیر شیرده','بره'];let cs=['green','orange','blue','red'];
+ statusBox.innerHTML=groups.map((g,i)=>`<div class="status-row"><span><i class="dot ${cs[i]}"></i>${g}</span><b>${db.animals.filter(a=>a.status===g).length}</b></div>`).join('');
+ recentAnimals.innerHTML=db.animals.slice(0,6).map(a=>animalTR(a,false)).join('');
+}
+function animalTR(a,actions=true){return `<tr><td>${a.id}</td><td>${a.tag||'—'}</td><td>${a.name||'—'}</td><td>${a.breed||'—'}</td><td>${a.gender}</td><td>${a.birth||'—'}</td><td>${age(a.birth)}</td><td>${a.weight||'—'}</td><td><span class="tag">${a.status}</span></td>${actions?`<td>${lastMilk(a.id)}</td><td><div class="actions"><button class="btn secondary mini" onclick="openAnimal(db.animals.find(x=>x.id==='${a.id}'))">ویرایش</button><button class="btn danger mini" onclick="delAnimal('${a.id}')">حذف</button></div></td>`:''}</tr>`}
+function renderAnimals(){let q=(animalSearch?.value||'').toLowerCase(),f=animalFilter?.value||'';animalRows.innerHTML=db.animals.filter(a=>(!q||Object.values(a).join(' ').toLowerCase().includes(q))&&(!f||a.status===f)).map(a=>animalTR(a)).join('')||'<tr><td colspan="11" class="empty">موردی پیدا نشد</td></tr>'}
+function renderMilk(){let today=new Date().toISOString().slice(0,10),todayVal=db.milk.filter(x=>x.date===today).reduce((s,x)=>s+x.amount,0),all=db.milk.reduce((s,x)=>s+x.amount,0),avg=db.milk.length?all/db.milk.length:0;
+ milkKpis.innerHTML=[['شیر امروز',todayVal],['کل ثبت‌شده',all],['میانگین هر نوبت',avg.toFixed(1)],['تعداد ثبت‌ها',db.milk.length]].map(x=>`<div class="card stat">${x[0]}<b>${fa(x[1])}</b><small>لیتر / رکورد</small></div>`).join('');
+ milkRows.innerHTML=db.milk.map((x,i)=>`<tr><td>${x.animal}</td><td>${x.date}</td><td>${x.time}</td><td>${x.shift}</td><td>${x.amount}</td><td>${x.note||'—'}</td><td><button class="btn danger mini" onclick="del('milk',${i})">حذف</button></td></tr>`).join('')}
+function renderHealth(){healthRows.innerHTML=db.health.map((x,i)=>`<tr><td>${x.animal}</td><td>${x.type}</td><td>${x.title}</td><td>${x.date||'—'}</td><td>${x.next||'—'}</td><td>${x.note||'—'}</td><td><button class="btn danger mini" onclick="del('health',${i})">حذف</button></td></tr>`).join('')}
+function renderBreed(){breedRows.innerHTML=db.breeding.map((x,i)=>`<tr><td>${x.animal}</td><td>${x.type}</td><td>${x.mate||'—'}</td><td>${x.due||'—'}</td><td>${x.birth||'—'}</td><td>${x.lambs||'—'}</td><td>${x.note||'—'}</td><td><button class="btn danger mini" onclick="del('breeding',${i})">حذف</button></td></tr>`).join('')}
+function renderFinance(){let income=db.finance.filter(x=>x.type==='درآمد').reduce((s,x)=>s+x.amount,0),cost=db.finance.filter(x=>x.type==='هزینه').reduce((s,x)=>s+x.amount,0);
+ financeKpis.innerHTML=[['کل درآمد',income],['کل هزینه',cost],['سود / زیان',income-cost],['تعداد تراکنش',db.finance.length]].map(x=>`<div class="card stat">${x[0]}<b>${fa(x[1])}</b><small>${x[0]==='تعداد تراکنش'?'رکورد':db.settings.currency}</small></div>`).join('');
+ financeRows.innerHTML=db.finance.map((x,i)=>`<tr><td>${x.type}</td><td>${x.cat}</td><td>${fa(x.amount)} ${db.settings.currency}</td><td>${x.date}</td><td>${x.note||'—'}</td><td><button class="btn danger mini" onclick="del('finance',${i})">حذف</button></td></tr>`).join('')}
+function renderReports(){let milk=db.milk.reduce((s,x)=>s+x.amount,0),income=db.finance.filter(x=>x.type==='درآمد').reduce((s,x)=>s+x.amount,0),cost=db.finance.filter(x=>x.type==='هزینه').reduce((s,x)=>s+x.amount,0);reportBox.innerHTML=`<h3>خلاصه گزارش دامداری سلیمی</h3><div class="kpis"><div class="card">کل دام<b>${fa(db.animals.length)}</b></div><div class="card">کل شیر ثبت‌شده<b>${fa(milk)} لیتر</b></div><div class="card">درآمد<b>${fa(income)} ${db.settings.currency}</b></div><div class="card">سود / زیان<b>${fa(income-cost)} ${db.settings.currency}</b></div></div><p class="muted">برای گزارش رسمی می‌توانید از دکمه چاپ استفاده کنید.</p>`}
+function saveSettings(){db.settings={owner:setName.value||'حسن سلیمی',farm:setFarm.value||'دامداری سلیمی',currency:setCurrency.value||'تومان'};save();notify('تنظیمات ذخیره شد')}
+function renderSettings(){setName.value=db.settings.owner;setFarm.value=db.settings.farm;setCurrency.value=db.settings.currency;ownerName.textContent=db.settings.owner;welcomeName.textContent=db.settings.owner;document.querySelector('.brand h1').textContent=db.settings.farm}
+function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='damdari-salimi-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);save();notify('اطلاعات بازیابی شد')}catch{notify('فایل معتبر نیست')}};r.readAsText(f)}
+function printReport(){go('reports');setTimeout(()=>window.print(),100)}
+function renderAll(){renderDashboard();renderAnimals();renderMilk();renderHealth();renderBreed();renderFinance();renderReports();renderSettings()}
+today.textContent=new Intl.DateTimeFormat('fa-IR',{dateStyle:'full'}).format(new Date());
+renderAll();
+</script>
+</body></html>
