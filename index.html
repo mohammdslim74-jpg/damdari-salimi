@@ -181,7 +181,79 @@ function exportData(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'appli
 function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);save();notify('اطلاعات بازیابی شد')}catch{notify('فایل معتبر نیست')}};r.readAsText(f)}
 function printReport(){go('reports');setTimeout(()=>window.print(),100)}
 function renderAll(){renderDashboard();renderAnimals();renderMilk();renderHealth();renderBreed();renderFinance();renderReports();renderSettings()}
-today.textContent=new Intl.DateTimeFormat('fa-IR',{dateStyle:'full'}).format(new Date());
+today.textContent=new Intl.DateTimeFormat('fa-IR',{dateStyle:'full'}).format(new Date());today.textContent=new Intl.DateTimeFormat('fa-IR',{dateStyle:'full'}).format(new Date());
+
+const SUPABASE_URL = 'https://bnujypuqixevtwbuvavk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ySg5D1a15w1nxtZ9yTpWTw_bR3dLk4O';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);async function showAccount(){
+  const { data:{session} } = await supabaseClient.auth.getSession();
+
+  if(session){
+    alert('وارد شده‌اید:\n' + session.user.email);
+    return;
+  }
+
+  openModal(`
+    <div class="section-title">
+      <h2>حساب آنلاین</h2>
+      <button class="btn secondary" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="form">
+      <label>
+        ایمیل
+        <input type="email" id="authEmail" placeholder="example@email.com">
+      </label>
+
+      <label>
+        رمز عبور
+        <input type="password" id="authPassword" placeholder="حداقل ۶ کاراکتر">
+      </label>
+    </div>
+
+    <div style="margin-top:18px">
+      <button class="btn primary" onclick="authLogin()">ورود</button>
+      <button class="btn secondary" onclick="authRegister()">ثبت‌نام</button>
+    </div>
+  `);
+}
+
+async function authLogin(){
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  closeModal();
+  notify('ورود موفق بود');
+}
+
+async function authRegister(){
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+
+  const { error } = await supabaseClient.auth.signUp({
+    email,
+    password
+  });
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  notify('ثبت‌نام انجام شد. ایمیل خود را بررسی کنید.');
+ }
+
+renderAll();
 renderAll();
 </script>
 </body></html>
