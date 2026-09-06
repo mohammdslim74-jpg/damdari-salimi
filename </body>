@@ -256,4 +256,77 @@ async function authRegister(){
 renderAll();
 renderAll();
 </script>
-</body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL='https://bnujypuqixevtwbuvavk.supabase.co';
+const SUPABASE_KEY='sb_publishable_ySg5D1a15w1nxtZ9yTpWTw_bR3dLk4O';
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+async function saveOnlineBackup(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session)return;
+  await supabaseClient.from('farm_backups').upsert({
+    user_id:session.user.id,
+    data:db,
+    updated_at:new Date().toISOString()
+  },{onConflict:'user_id'});
+}
+
+async function restoreOnlineBackup(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session){alert('ابتدا وارد حساب شوید');return}
+  const {data,error}=await supabaseClient.from('farm_backups')
+    .select('data').eq('user_id',session.user.id).maybeSingle();
+  if(error){alert(error.message);return}
+  if(data?.data){
+    db=data.data;
+    localStorage.setItem(KEY,JSON.stringify(db));
+    renderAll();
+    alert('اطلاعات بازیابی شد');
+  }else alert('پشتیبان آنلاینی وجود ندارد');
+}
+
+async function showAccount(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+
+  openModal(`
+    <div class="section-title">
+      <h2>☁ حساب آنلاین</h2>
+      <button class="btn secondary" onclick="closeModal()">×</button>
+    </div>
+    ${session ? `
+      <p>ایمیل: <b>${session.user.email}</b></p>
+      <button class="btn primary" onclick="saveOnlineBackup()">☁ پشتیبان‌گیری الآن</button>
+      <button class="btn secondary" onclick="restoreOnlineBackup()">↻ بازیابی</button>
+      <button class="btn danger" onclick="supabaseClient.auth.signOut();closeModal()">خروج</button>
+    ` : `
+      <div class="form">
+        <label>ایمیل<input id="authEmail" type="email"></label>
+        <label>رمز عبور<input id="authPassword" type="password"></label>
+      </div>
+      <br>
+      <button class="btn primary" onclick="authLogin()">ورود</button>
+      <button class="btn secondary" onclick="authRegister()">ثبت‌نام</button>
+    `}
+  `);
+}
+
+async function authLogin(){
+  const email=document.getElementById('authEmail').value.trim();
+  const password=document.getElementById('authPassword').value;
+  const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){alert(error.message);return}
+  closeModal();
+  await restoreOnlineBackup();
+}
+
+async function authRegister(){
+  const email=document.getElementById('authEmail').value.trim();
+  const password=document.getElementById('authPassword').value;
+  if(password.length<6){alert('رمز عبور حداقل ۶ کاراکتر باشد');return}
+  const {error}=await supabaseClient.auth.signUp({email,password});
+  if(error){alert(error.message);return}
+  alert('ثبت‌نام انجام شد؛ ایمیل خود را تأیید کنید.');
+}
+</script></body></html>
