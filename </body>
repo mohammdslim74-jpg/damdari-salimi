@@ -329,4 +329,13 @@ async function authRegister(){
   if(error){alert(error.message);return}
   alert('ثبت‌نام انجام شد؛ ایمیل خود را تأیید کنید.');
 }
-</script></body></html>
+</script>[کد قبلی سایت]
+
+<div class="card form-card" style="margin-top:16px">
+<h3>☁ حساب آنلاین</h3>
+<p class="muted">پشتیبان‌گیری آنلاین اطلاعات دامداری</p>
+<button class="btn primary" onclick="showAccount()">👤 حساب آنلاین</button>
+<button class="btn secondary" onclick="restoreOnlineBackup()">↻ بازیابی اطلاعات</button>
+</div>
+
+</body></html>
